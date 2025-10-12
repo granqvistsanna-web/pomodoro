@@ -3,8 +3,8 @@ import { useState, useEffect } from "react"
 
 framer.showUI({
     position: "top right",
-    width: 240,
-    height: 95,
+    width: 320,
+    height: 320,
 })
 
 function useSelection() {
@@ -30,16 +30,12 @@ export function App() {
 
     return (
         <main className="flex flex-col items-start px-4 pb-4h-full gap-4">
-            <p className="text-2xl text-blue-500">
-                Welcome! Check out the{" "}
-                <a href="https://framer.com/developers/plugins/introduction" target="_blank">
-                    Docs
-                </a>{" "}
-                to start. You have {selection.length} {layer} selected.
+            <p className="text-lg">
+                Welcome to your Framer plugin Starter Kit!
             </p>
-            <button className="framer-button-primary" onClick={handleAddSvg}>
-                Insert Logo
-            </button>
+            <p className="text-base">
+                This is a preview of your plugin. Any changes you make in Cursor will automatically update here when you save.
+            </p>
         </main>
     )
 }
