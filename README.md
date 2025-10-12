@@ -1,19 +1,6 @@
-# Framer Plugin Template
+# Framer Plugin Starter Kit
 
-This is a template for using the Framer Plugin API in a TypeScript project.
+This is a starter kit to build a Framer Plugin with Cursor, Tailwind CSS and custom Cursor rules.
 
-## Quickstart
+Read the full tutorial [here](https://frameplugins.com/blog/how-to-build-a-framer-plugin-with-cursor) to build your first plugin with this starter kit.
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Learn more: https://www.framer.com/developers/plugins/introduction
