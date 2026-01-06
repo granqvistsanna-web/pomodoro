@@ -20,7 +20,7 @@ framer.showUI({
 })
 
 export function App() {
-    const { theme, toggle: toggleTheme } = useTheme()
+    const { theme } = useTheme()
     const { toggle: toggleSize, isMini } = usePluginSize()
     const [showSettings, setShowSettings] = useState(false)
     const [toast, setToast] = useState<ToastState>({
@@ -57,8 +57,6 @@ export function App() {
                     onClose={() => setShowSettings(false)}
                     timerStatus={pomodoro.state.status}
                     timeRemaining={pomodoro.state.timeRemaining}
-                    theme={theme}
-                    onToggleTheme={toggleTheme}
                 />
             </main>
         )

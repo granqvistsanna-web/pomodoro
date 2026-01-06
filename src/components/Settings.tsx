@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react"
-import type { Theme, TimerStatus, PomodoroSettings } from "../types"
+import type { TimerStatus, PomodoroSettings } from "../types"
 import { formatTime } from "../utils/format"
 
 interface SettingsProps {
@@ -8,8 +8,6 @@ interface SettingsProps {
     onClose: () => void
     timerStatus?: TimerStatus
     timeRemaining?: number
-    theme: Theme
-    onToggleTheme: () => void
 }
 
 interface NumberInputProps {
@@ -31,7 +29,7 @@ function NumberInput({ label, value, onChange, min = 1, max = 60, suffix = "min"
                     onClick={() => onChange(Math.max(min, value - 1))}
                     aria-label={`Decrease ${label}`}
                     disabled={value <= min}
-                    className="icon-btn w-6 h-6 flex items-center justify-center rounded-full text-theme-text-muted transition-all active:scale-90 disabled:opacity-40"
+                    className="icon-btn w-6 h-6 flex items-center justify-center rounded-full text-theme-text-secondary transition-all active:scale-90 disabled:opacity-40"
                 >
                     <svg width="8" height="8" viewBox="0 0 10 10" fill="none" aria-hidden="true">
                         <path d="M2.5 5H7.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
@@ -48,7 +46,7 @@ function NumberInput({ label, value, onChange, min = 1, max = 60, suffix = "min"
                     onClick={() => onChange(Math.min(max, value + 1))}
                     aria-label={`Increase ${label}`}
                     disabled={value >= max}
-                    className="icon-btn w-6 h-6 flex items-center justify-center rounded-full text-theme-text-muted transition-all active:scale-90 disabled:opacity-40"
+                    className="icon-btn w-6 h-6 flex items-center justify-center rounded-full text-theme-text-secondary transition-all active:scale-90 disabled:opacity-40"
                 >
                     <svg width="8" height="8" viewBox="0 0 10 10" fill="none" aria-hidden="true">
                         <path d="M5 2.5V7.5M2.5 5H7.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
@@ -97,7 +95,7 @@ function Toggle({ label, checked, onChange }: ToggleProps) {
 const SUPPORT_EMAIL = "granqvistsanna@gmail.com"
 const WIKIPEDIA_URL = "https://en.wikipedia.org/wiki/Pomodoro_Technique"
 
-export function Settings({ settings, onUpdate, onClose, timerStatus, timeRemaining, theme, onToggleTheme }: SettingsProps) {
+export function Settings({ settings, onUpdate, onClose, timerStatus, timeRemaining }: SettingsProps) {
     const isTimerActive = timerStatus === "running" || timerStatus === "paused"
     const [showSaved, setShowSaved] = useState(false)
     const saveTimeoutRef = useRef<number>()
@@ -185,11 +183,6 @@ export function Settings({ settings, onUpdate, onClose, timerStatus, timeRemaini
                     label="Sound"
                     checked={settings.soundEnabled}
                     onChange={(v) => onUpdate({ soundEnabled: v })}
-                />
-                <Toggle
-                    label="Dark mode"
-                    checked={theme === "dark"}
-                    onChange={onToggleTheme}
                 />
             </div>
 

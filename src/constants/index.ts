@@ -13,7 +13,6 @@ export const PLUGIN_SIZES = {
  * localStorage keys - centralized to avoid typos and enable refactoring
  */
 export const STORAGE_KEYS = {
-    theme: "pomodoro-theme",
     size: "pomodoro-size",
     settings: "pomodoro-settings",
     state: "pomodoro-state",

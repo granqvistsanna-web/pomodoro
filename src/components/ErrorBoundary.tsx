@@ -28,7 +28,7 @@ export class ErrorBoundary extends Component<Props, State> {
             localStorage.removeItem("pomodoro-settings")
             localStorage.removeItem("pomodoro-state")
             localStorage.removeItem("pomodoro-today")
-            localStorage.removeItem("pomodoro-theme")
+            localStorage.removeItem("pomodoro-size")
         } catch {
             // Ignore storage errors
         }
