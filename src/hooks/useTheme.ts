@@ -10,13 +10,25 @@ export function useTheme() {
 
     // Subscribe to Framer's theme
     useEffect(() => {
-        const unsubscribe = framer.subscribe("theme", (framerTheme) => {
-            const newTheme = framerTheme === "dark" ? "dark" : "light"
-            setTheme(newTheme)
-            document.documentElement.setAttribute("data-theme", newTheme)
-        })
+        let unsubscribe: (() => void) | undefined
 
-        return unsubscribe
+        try {
+            unsubscribe = framer.subscribe("theme", (framerTheme) => {
+                const newTheme = framerTheme === "dark" ? "dark" : "light"
+                setTheme(newTheme)
+                document.documentElement.setAttribute("data-theme", newTheme)
+            })
+        } catch {
+            // Fallback to system preference if Framer subscription fails
+            const isDark = window.matchMedia?.("(prefers-color-scheme: dark)").matches
+            const fallbackTheme = isDark ? "dark" : "light"
+            setTheme(fallbackTheme)
+            document.documentElement.setAttribute("data-theme", fallbackTheme)
+        }
+
+        return () => {
+            if (unsubscribe) unsubscribe()
+        }
     }, [])
 
     return { theme }
