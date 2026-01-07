@@ -20,7 +20,7 @@ framer.showUI({
 })
 
 export function App() {
-    const { theme } = useTheme()
+    useTheme() // Applies theme as side effect
     const { toggle: toggleSize, isMini } = usePluginSize()
     const [showSettings, setShowSettings] = useState(false)
     const [toast, setToast] = useState<ToastState>({

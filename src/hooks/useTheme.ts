@@ -6,41 +6,95 @@ function applyTheme(mode: Theme) {
 }
 
 /**
- * Get current theme from prefers-color-scheme media query
- * Framer syncs this with its theme setting for plugin iframes
+ * Get current theme from Framer's data-framer-theme attribute
+ * Checks both html and body elements, with system preference as fallback
  */
-function getSystemTheme(): Theme {
-    return window.matchMedia?.("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+function getFramerTheme(): Theme {
+    // Check html element first
+    const htmlTheme = document.documentElement.getAttribute("data-framer-theme")
+    if (htmlTheme === "dark" || htmlTheme === "light") {
+        return htmlTheme
+    }
+
+    // Check body element
+    const bodyTheme = document.body?.getAttribute("data-framer-theme")
+    if (bodyTheme === "dark" || bodyTheme === "light") {
+        return bodyTheme
+    }
+
+    // Fallback to system preference
+    if (window.matchMedia?.("(prefers-color-scheme: dark)").matches) {
+        return "dark"
+    }
+
+    return "light"
 }
 
 /**
  * Hook for syncing theme with Framer's theme setting
- * Uses prefers-color-scheme media query which Framer syncs with its UI theme
+ * Uses data-framer-theme attribute which Framer sets based on the app's theme
+ * Falls back to system preference if Framer theme not available
  */
 export function useTheme() {
     const [theme, setTheme] = useState<Theme>(() => {
-        const initial = getSystemTheme()
+        const initial = getFramerTheme()
         applyTheme(initial)
         return initial
     })
 
     useEffect(() => {
-        const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)")
-
-        const handleChange = (e: MediaQueryListEvent | MediaQueryList) => {
-            const newTheme = e.matches ? "dark" : "light"
+        // Function to update theme from Framer's attribute
+        const updateTheme = () => {
+            const newTheme = getFramerTheme()
             setTheme(newTheme)
             applyTheme(newTheme)
         }
 
         // Apply initial theme
-        handleChange(mediaQuery)
+        updateTheme()
 
-        // Listen for changes
-        mediaQuery.addEventListener("change", handleChange)
+        // Watch for changes to data-framer-theme attribute on both html and body
+        const observer = new MutationObserver((mutations) => {
+            for (const mutation of mutations) {
+                if (
+                    mutation.type === "attributes" &&
+                    mutation.attributeName === "data-framer-theme"
+                ) {
+                    updateTheme()
+                    break
+                }
+            }
+        })
+
+        // Observe both html and body elements for attribute changes
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ["data-framer-theme"],
+        })
+
+        if (document.body) {
+            observer.observe(document.body, {
+                attributes: true,
+                attributeFilter: ["data-framer-theme"],
+            })
+        }
+
+        // Also listen for system preference changes as fallback
+        const mediaQuery = window.matchMedia?.("(prefers-color-scheme: dark)")
+        const handleMediaChange = () => {
+            // Only use system preference if Framer hasn't set a theme
+            const htmlTheme = document.documentElement.getAttribute("data-framer-theme")
+            const bodyTheme = document.body?.getAttribute("data-framer-theme")
+            if (!htmlTheme && !bodyTheme) {
+                updateTheme()
+            }
+        }
+
+        mediaQuery?.addEventListener?.("change", handleMediaChange)
 
         return () => {
-            mediaQuery.removeEventListener("change", handleChange)
+            observer.disconnect()
+            mediaQuery?.removeEventListener?.("change", handleMediaChange)
         }
     }, [])
 

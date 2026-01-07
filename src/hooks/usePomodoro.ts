@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react"
 import { usePomodoroSettings } from "./useLocalStorage"
 import { playCompletionSound, initAudio } from "../utils/sound"
-import type { TimerMode, TimerStatus, PomodoroSettings, PomodoroState } from "../types"
+import type { TimerMode, PomodoroSettings, PomodoroState } from "../types"
 import {
     STORAGE_KEYS,
     TIMER_TICK_INTERVAL,
